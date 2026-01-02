@@ -289,3 +289,64 @@ See `DEVELOPER_GUIDE.md` → Debugging section
 - API key is secure and never exposed to the browser
 - Auto-deploys from GitHub to Render on every push to main branch
 - Completely free to run and deploy forever
+
+---
+
+## Pitch
+
+ResolutionRoulette
+
+"Where your 2026 dreams meet brutal honesty" — Direct, witty, memorable.
+
+Your personal goal reality-checker — powered by AI, delivered with wit.
+
+ResolutionRoulette, witty AI-powered resolution evaluator is a full-stack web application that takes New Year's resolution, spins ambitious goals through reality filter by utilising  AI-powered intelligence (Groq's Mixtral 8x7B) and delivers honest-but-kind feedback wrapped in witty, relatable commentary.
+✅ Actually Achievable (you've got this!)
+🎪 Optimistic But Possible (bring coffee)
+🚀 Delusional (But We Admire The Confidence) (we're rooting for you, you beautiful dreamer)
+
+Spin the wheel. Get honest feedback. Ace your resolutions !
+
+What Makes It Fun & Special
+✨ Strong New-Year humour — Honest feedback, zero judgement
+🤖 AI-Powered — Uses Groq API for context-aware, personalized responses.
+🔒 Secure — API key locked down server-side (never exposed).
+🎨 Beautiful — Glassmorphism UI with smooth animations.
+📱 Cross-Platform — Works on desktop, mobile, tablet.
+🚀 Live & Free — Deployed on Render, auto-deploys from GitHub.
+📚 Documented — 12 comprehensive guides for developers and users.
+
+Tech Stack 
+Powered by Node.js/Express, Vanilla JS, and Groq's cutting-edge AI
+
+😄 Fun & On-Theme | 🔍 Peek behind the reality filter — view the code on GitHub.
+https://github.com/khshaik/resolution-reality-check
+
+👉 Project structure
+resolution-reality-check/
+│
+├── node_modules/                 # Installed Node.js dependencies
+│
+├── notes/                        # Project documentation & internal notes
+│   ├── migration/                # Migration-related notes (if any)
+│   ├── API_DOCUMENTATION.md      # API endpoints & request/response details
+│   ├── ARCHITECTURE.md           # High-level system architecture
+│   ├── DEPLOYMENT_GUIDE.md       # Deployment steps & environment setup
+│   ├── DEVELOPER_GUIDE.md        # Developer instructions & workflows
+│   ├── PROJECT_OVERVIEW.md       # Purpose, scope & app overview
+│   ├── SETUP_GUIDE.md            # Local setup instructions
+│   └── TECH_STACK.md             # Technology stack details
+│
+├── snips/                        # Code snippets / experiments / prompt drafts
+│
+├── .env                          # Environment variables (Groq API key, config)
+├── .gitignore                    # Git ignore rules
+│
+├── index.html                    # Frontend UI (ResolutionRoulette interface)
+│
+├── package.json                  # Project metadata, scripts & dependencies
+├── package-lock.json             # Locked dependency versions
+│
+├── README.md                     # Main project README
+│
+└── server.js                     # Node.js / Express backend (AI logic & API)
