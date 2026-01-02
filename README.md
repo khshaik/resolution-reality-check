@@ -81,12 +81,34 @@ A witty, self-aware New Year's resolution evaluator that tells you honestly whet
 ## Project Structure
 
 ```
-FUNNYAPP/
-├── index.html          # Frontend UI
-├── server.js           # Express backend server
-├── package.json        # Dependencies
-├── .env                # Environment variables (API key)
-└── README.md           # This file
+resolution-reality-check/
+│
+├── node_modules/                 # Installed Node.js dependencies
+│
+├── notes/                        # Project documentation & internal notes
+│   ├── migration/                # Migration-related notes (if any)
+│   ├── API_DOCUMENTATION.md      # API endpoints & request/response details
+│   ├── ARCHITECTURE.md           # High-level system architecture
+│   ├── DEPLOYMENT_GUIDE.md       # Deployment steps & environment setup
+│   ├── DEVELOPER_GUIDE.md        # Developer instructions & workflows
+│   ├── PROJECT_OVERVIEW.md       # Purpose, scope & app overview
+│   ├── SETUP_GUIDE.md            # Local setup instructions
+│   └── TECH_STACK.md             # Technology stack details
+│
+├── snips/                        # Code snippets / experiments / prompt drafts
+│
+├── .env                          # Environment variables (Groq API key, config)
+├── .gitignore                    # Git ignore rules
+│
+├── index.html                    # Frontend UI (ResolutionRoulette interface)
+│
+├── package.json                  # Project metadata, scripts & dependencies
+├── package-lock.json             # Locked dependency versions
+│
+├── README.md                     # Main project README
+│
+└── server.js                     # Node.js / Express backend (AI logic & API)
+
 ```
 
 ## Deployment
