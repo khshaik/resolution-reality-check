@@ -95,3 +95,6 @@ FUNNYAPP/
 - All feedback is designed to be honest but kind
 - Perfect for January 1st motivation or anytime you need a reality check on your goals
 - API key is secure and never exposed to the browser
+
+# URL
+https://resolution-reality-check.onrender.com
