@@ -54,7 +54,7 @@ git push -u origin main
 2. Click **"Add Environment Variable"**
 3. Add:
    - **Key:** `GROQ_API_KEY`
-   - **Value:** `YOUR_API_KEY_HERE`
+   - **Value:** `<your-groq-api-key>`
 4. Click **"Deploy"**
 
 #### Step 5: Wait for Deployment

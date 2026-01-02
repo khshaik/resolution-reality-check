@@ -27,7 +27,7 @@ Or use the **"Import from GitHub"** option if you push to GitHub first.
 1. In StackBlitz, click the **"Secrets"** icon (lock icon in left sidebar)
 2. Add a new secret:
    - **Key:** `GROQ_API_KEY`
-   - **Value:** `YOUR_API_KEY_HERE`
+   - **Value:** `<your-groq-api-key>`
 3. Click **"Add Secret"**
 
 ### Step 4: Install Dependencies

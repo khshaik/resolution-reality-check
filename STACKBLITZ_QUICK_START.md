@@ -24,7 +24,7 @@ In the StackBlitz editor:
 2. Click **"Add Secret"**
 3. Enter:
    - **Key:** `GROQ_API_KEY`
-   - **Value:** `YOUR_API_KEY_HERE`
+   - **Value:** `<your-groq-api-key>`
 4. Click **"Add"**
 
 ### Step 5: Install & Run
