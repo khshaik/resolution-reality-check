@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Resolution Reality Check 🎯</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes pulse-glow {
+        0%,
+        100% {
+          box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+        50% {
+          box-shadow: 0 0 40px rgba(59, 130, 246, 0.8);
+        }
+      }
+
+      .animate-slide-in {
+        animation: slideIn 0.5s ease-out;
+      }
+
+      .glow-pulse {
+        animation: pulse-glow 2s ease-in-out infinite;
+      }
+
+      .verdict-card {
+        backdrop-filter: blur(10px);
+        border: 2px solid;
+      }
+
+      .achievable {
+        border-color: #10b981;
+        background: linear-gradient(
+          135deg,
+          rgba(16, 185, 129, 0.1) 0%,
+          rgba(16, 185, 129, 0.05) 100%
+        );
+      }
+
+      .optimistic {
+        border-color: #f59e0b;
+        background: linear-gradient(
+          135deg,
+          rgba(245, 158, 11, 0.1) 0%,
+          rgba(245, 158, 11, 0.05) 100%
+        );
+      }
+
+      .delusional {
+        border-color: #ec4899;
+        background: linear-gradient(
+          135deg,
+          rgba(236, 72, 153, 0.1) 0%,
+          rgba(236, 72, 153, 0.05) 100%
+        );
+      }
+    </style>
+  </head>
+  <body
+    class="bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 min-h-screen text-white overflow-x-hidden"
+  >
+    <div class="fixed inset-0 opacity-30 pointer-events-none">
+      <div
+        class="absolute top-0 left-1/4 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl animate-pulse"
+      ></div>
+      <div
+        class="absolute top-1/2 right-1/4 w-96 h-96 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl animate-pulse"
+        style="animation-delay: 2s"
+      ></div>
+    </div>
+
+    <div
+      class="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-8"
+    >
+      <div class="w-full max-w-2xl">
+        <!-- Header -->
+        <div class="text-center mb-12 animate-slide-in">
+          <h1
+            class="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent"
+          >
+            Resolution Reality Check
+          </h1>
+          <p class="text-xl text-gray-300 mb-2">
+            🎯 Let's be honest about your 2026 goals
+          </p>
+          <p class="text-sm text-gray-400">
+            Because January 1st is the perfect time for delightful
+            self-awareness
+          </p>
+        </div>
+
+        <!-- Input Section -->
+        <div
+          class="bg-white/10 backdrop-blur-md rounded-2xl p-8 mb-8 border border-white/20 animate-slide-in"
+          style="animation-delay: 0.1s"
+        >
+          <label class="block text-lg font-semibold mb-4"
+            >What's your New Year resolution?</label
+          >
+          <textarea
+            id="resolutionInput"
+            placeholder="e.g., 'Go to the gym 5 times a week' or 'Learn to code and build an app'"
+            class="w-full bg-white/5 border border-white/20 rounded-lg p-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent resize-none h-24"
+          ></textarea>
+          <button
+            onclick="evaluateResolution()"
+            class="mt-6 w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 glow-pulse"
+          >
+            ✨ Get Honest Feedback ✨
+          </button>
+        </div>
+
+        <!-- Result Section -->
+        <div id="resultSection" class="hidden animate-slide-in">
+          <div id="resultCard" class="verdict-card rounded-2xl p-8 mb-6"></div>
+
+          <button
+            onclick="resetApp()"
+            class="w-full bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200"
+          >
+            Try Another Resolution
+          </button>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="hidden text-center">
+          <div class="inline-block">
+            <div
+              class="w-12 h-12 border-4 border-purple-400 border-t-blue-400 rounded-full animate-spin mb-4"
+            ></div>
+            <p class="text-gray-300">Consulting the resolution oracle...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const evaluationPrompts = {
+        achievable: [
+          '✅ ACTUALLY ACHIEVABLE',
+          'This is the kind of goal that separates the dreamers from the doers.',
+          "You've got this. Seriously. No delusion required.",
+          'The universe is nodding in approval.',
+        ],
+        optimistic: [
+          '🎪 OPTIMISTIC BUT POSSIBLE',
+          "You're playing on hard mode, but hey, we respect the ambition.",
+          'Will it be easy? Absolutely not. Impossible? Also no.',
+          'Bring coffee. Lots of coffee.',
+        ],
+        delusional: [
+          '🚀 DELUSIONAL (BUT WE ADMIRE THE CONFIDENCE)',
+          'This is the energy we need more of in the world.',
+          "If you pull this off, you'll be a legend. If not, at least you tried spectacularly.",
+          "We're rooting for you, you beautiful dreamer.",
+        ],
+      };
+
+      const keywords = {
+        achievable: [
+          'read',
+          'walk',
+          'meditate',
+          'journal',
+          'drink water',
+          'sleep',
+          'call',
+          'visit family',
+          'practice',
+          'hobby',
+          'stretch',
+          'organize',
+          'cook',
+          'listen',
+          'be kind',
+          'grateful',
+          'mindful',
+          'sleep 8 hours',
+          'take breaks',
+          'say no',
+          'ask for help',
+          'take notes',
+          'one book',
+          'daily walk',
+          'morning routine',
+          'evening routine',
+          'family',
+          'with family',
+          'relax',
+          'breathe',
+          'break',
+          'rest',
+          'enjoy',
+          'spend time',
+          'connect',
+          'be present',
+          'limit screen time',
+          'unplug',
+          'go outside',
+          'nature',
+          'pet',
+          'smile',
+          'laugh',
+          'appreciate',
+          'notice',
+          'document',
+          'small step',
+          'tiny goal',
+          'weekly',
+          'monthly',
+          'quarterly',
+        ],
+        optimistic: [
+          'gym',
+          'exercise',
+          'run',
+          'weight',
+          'diet',
+          'healthy',
+          'fit',
+          'lose weight',
+          'language',
+          'skill',
+          'project',
+          'business',
+          'side hustle',
+          'promotion',
+          'relationship',
+          'dating',
+          'save money',
+          'invest',
+          'write',
+          'publish',
+          'learn coding',
+          'certification',
+          'degree',
+          'new job',
+          'raise',
+          'work-life balance',
+          'fitness goal',
+          'marathon',
+          'half marathon',
+          'train',
+          'discipline',
+          'consistent',
+          'weekly goal',
+          'achieve',
+          'accomplish',
+          'complete',
+          'finish',
+          'master',
+          'develop',
+          'improve',
+          'strengthen',
+          'build muscle',
+          'tone',
+          'strength',
+          'endurance',
+          'stamina',
+          'run faster',
+          'increase',
+          'build wealth',
+          'financial',
+          'earn',
+          'revenue',
+          'income',
+          'profit',
+          'start up',
+          'entrepreneurship',
+          'grow',
+          'expand',
+          'network',
+          'connect',
+          'reach out',
+          'collaborate',
+          'partner',
+          'mentor',
+          'lead',
+          'inspire',
+          'influence',
+          'create',
+          'design',
+          'develop',
+          'innovate',
+        ],
+        delusional: [
+          'billionaire',
+          'millionaire',
+          'famous',
+          'celebrity',
+          'model',
+          'actor',
+          'perfect',
+          'never stress',
+          'always happy',
+          'quit everything',
+          'change completely',
+          'become a superhero',
+          'genius',
+          'perfect life',
+          'overnight',
+          'immediately',
+          'lose 100',
+          'six pack',
+          'superhuman',
+          'mountain',
+          'everest',
+          'trek',
+          'bermuda',
+          'triangle',
+          'climb',
+          'expedition',
+          'world tour',
+          'around the world',
+          'all countries',
+          'master in 30 days',
+          'fluent in 3 months',
+          'never fail',
+          'always succeed',
+          'lion',
+          'tiger',
+          'shark',
+          'crocodile',
+          'wild animal',
+          'dangerous animal',
+          'cage',
+          'space',
+          'astronaut',
+          'explore space',
+          'circumnavigate',
+          'globe',
+          'bicycle',
+          'prime minister',
+          'president',
+          'international cricket',
+          'represent country',
+          'north pole',
+          'south pole',
+          'swim',
+          'arctic',
+          'impossible',
+          'unrealistic',
+          'fantasy',
+          'dream',
+          'unicorn',
+          'lottery',
+          'jackpot',
+          'win',
+          'strike gold',
+          'overnight success',
+          'instant',
+          'magic',
+          'miracle',
+          'superhero power',
+          'teleportation',
+          'time travel',
+          'invisibility',
+          'flying',
+          'immortal',
+          'invincible',
+          'indestructible',
+          'unbeatable',
+          'unstoppable',
+          'ultimate',
+          'legendary',
+          'mythical',
+          'legendary',
+          'epic',
+          'legendary status',
+          'world record',
+          'olympic',
+          'champion',
+          'hall of fame',
+          'bestseller',
+          'grammy',
+          'oscar',
+          'nobel',
+          'nobel prize',
+          'breakthrough',
+          'revolutionary',
+          'paradigm shift',
+          'change the world',
+          'cure disease',
+          'solve hunger',
+          'end war',
+          'world peace',
+          'in a week',
+          'by next month',
+          'by spring',
+          'by summer',
+          'instantly',
+          'effortlessly',
+          'without effort',
+          'while sleeping',
+          'in your sleep',
+          'passive income',
+          'work smarter not harder',
+          'hack',
+          'shortcut',
+          'cheat code',
+          'secret technique',
+          'lose fat fast',
+          'six pack abs',
+          'ripped',
+          'shredded',
+          'peeled',
+          'cut',
+        ],
+      };
+
+      function categorizeResolution(text) {
+        const lower = text.toLowerCase();
+
+        let delusionalScore = 0;
+        let optimisticScore = 0;
+        let achievableScore = 0;
+
+        keywords.delusional.forEach((keyword) => {
+          const regex = new RegExp(`\\b${keyword}\\b`, 'i');
+          if (regex.test(lower)) delusionalScore += 3;
+        });
+
+        keywords.optimistic.forEach((keyword) => {
+          const regex = new RegExp(`\\b${keyword}\\b`, 'i');
+          if (regex.test(lower)) optimisticScore += 2;
+        });
+
+        keywords.achievable.forEach((keyword) => {
+          const regex = new RegExp(`\\b${keyword}\\b`, 'i');
+          if (regex.test(lower)) achievableScore += 1;
+        });
+
+        // Extreme language patterns
+        const extremeLanguage = /never\s|always\s|perfect|impossible|superhuman|genius|overnight|immediately|completely|100%|absolutely\s|positively\s|guaranteed|certain|impossible|must|will\s(definitely|absolutely)/;
+        if (extremeLanguage.test(lower)) {
+          delusionalScore += 5;
+        }
+
+        // Vague or uncertain language patterns (suggest achievable)
+        const vagueLanguage = /try|maybe|hope|think|if|could|might|seem|attempt|work on|focus on/;
+        if (vagueLanguage.test(lower)) {
+          achievableScore += 2;
+        }
+
+        // Time-bound and specific goals
+        const specificGoals = /(\d+\s*(times?|days?|hours?|weeks?|months?|years?|pages?|books?|miles?|kg|pounds?|lbs))|per\s(week|month|year|day)|daily|weekly|monthly|quarterly/;
+        if (specificGoals.test(lower)) {
+          achievableScore += 3;
+          optimisticScore += 1;
+        }
+
+        // Travel-related goals
+        if (/travel|trip|visit|tour|go\s(to|on)|adventure|explore/.test(lower)) {
+          if (/mountain|everest|bermuda|triangle|world tour|around\s(the\s)?world|all\scountries|circumnavigate|expedition/.test(lower)) {
+            delusionalScore += 4;
+          } else if (/plane|flight|international|country|countries|\bcity|cities/.test(lower)) {
+            optimisticScore += 2;
+          } else {
+            achievableScore += 1;
+          }
+        }
+
+        // Dangerous/illegal activities
+        if (/play\s(with|alongside)|pet|interact|touch|feed|wrestle|hunt/.test(lower)) {
+          if (/lion|tiger|shark|crocodile|wild|dangerous|predator|venomous/.test(lower)) {
+            delusionalScore += 5;
+          }
+        }
+
+        // Space exploration
+        if (/space|astronaut|nasa|moon|mars|space walk|zero gravity/.test(lower)) {
+          delusionalScore += 4;
+        }
+
+        // High-level politics/sports
+        if (/international|represent|country|countries|prime minister|president|parliament|congress|parliament/.test(lower)) {
+          if (!/family|friend|local|community|amateur|youth/.test(lower)) {
+            delusionalScore += 4;
+          }
+        }
+
+        // Extreme physical challenges
+        if (/circumnavigate|globe|bicycle|north pole|south pole|arctic|challenging|extreme|rigorous/.test(lower)) {
+          delusionalScore += 3;
+        }
+
+        // Wealth/status goals
+        if (/billionaire|millionaire|rich|wealth|fortune|inherit|win\s(lottery|jackpot)/.test(lower)) {
+          delusionalScore += 3;
+        }
+
+        // Fame/celebrity goals
+        if (/famous|celebrity|viral|trending|instagram|tiktok|youtube|influencer/.test(lower)) {
+          optimisticScore += 2;
+          delusionalScore += 1;
+        }
+
+        // Quick transformation claims
+        if (/quick|fast|rapid|speedy|in\s(\d+\s)?days?|by\s(next\s)?(week|month)|(in|within)\sa\s(week|month)/.test(lower)) {
+          if (/lose|gain|build|learn|master|fluent/.test(lower)) {
+            delusionalScore += 4;
+          } else {
+            optimisticScore += 1;
+          }
+        }
+
+        // Fitness/health goals
+        if (/gym|exercise|fit|workout|weight|diet|calories|protein|cardio|strength/.test(lower)) {
+          if (/lose\s\d+|six\s?pack|ripped|shredded|superhuman|overnight/.test(lower)) {
+            delusionalScore += 3;
+          } else {
+            optimisticScore += 2;
+          }
+        }
+
+        // Learning goals
+        if (/learn|master|fluent|language|coding|skill|certification|degree/.test(lower)) {
+          if (/fluent\sin\s\d+\s(days?|weeks?|months?)|master\sin|expert\sin/.test(lower)) {
+            delusionalScore += 3;
+          } else if (/start|begin|introduction|basics?/.test(lower)) {
+            achievableScore += 2;
+          } else {
+            optimisticScore += 2;
+          }
+        }
+
+        // Self-care/wellness (typically achievable)
+        if (/meditate|journal|sleep|rest|relax|mindful|yoga|breathe|stretch/.test(lower)) {
+          achievableScore += 2;
+        }
+
+        // Business/side project goals
+        if (/business|start\s(up|a|my)|side\shustle|entrepreneurship|launch|create/.test(lower)) {
+          if (/overnight|quick|fast|passive/.test(lower)) {
+            delusionalScore += 2;
+          } else {
+            optimisticScore += 2;
+          }
+        }
+
+        // Relationship/personal goals
+        if (/relationship|dating|love|meet|connect|friend|family/.test(lower)) {
+          if (/international|represent|world|extreme/.test(lower)) {
+            delusionalScore += 1;
+          } else {
+            achievableScore += 1;
+          }
+        }
+
+        // Handle negations and contradictions
+        if (/don't|wont|won't|not\s(go|eat|spend)|avoid/.test(lower)) {
+          achievableScore += 1;
+        }
+
+        // Impossibility markers
+        if (/can't|cannot|impossible|never\s(gonna|will)|too\slate|too\sold/.test(lower)) {
+          delusionalScore += 2;
+        }
+
+        // Determine category
+        if (delusionalScore > optimisticScore && delusionalScore > achievableScore) {
+          return 'delusional';
+        } else if (optimisticScore > achievableScore) {
+          return 'optimistic';
+        } else {
+          return 'achievable';
+        }
+      }
+
+      function generateFeedback(category, resolution) {
+        const prompts = evaluationPrompts[category];
+        const title = prompts[0];
+        const tagline = prompts[1];
+        const advice = prompts[2];
+        const encouragement = prompts[3];
+
+        let specificFeedback = '';
+
+        if (category === 'achievable') {
+          specificFeedback = `<p class="text-green-200 mt-4">Your resolution "${resolution}" is refreshingly realistic. You've identified something genuinely within your control. That's the sweet spot where New Year's resolutions actually become reality.</p>`;
+        } else if (category === 'optimistic') {
+          specificFeedback = `<p class="text-amber-200 mt-4">Your resolution "${resolution}" requires commitment, consistency, and probably some sacrifice. But it's not impossible—just don't expect it to happen by February. This is a marathon, not a sprint.</p>`;
+        } else {
+          specificFeedback = `<p class="text-pink-200 mt-4">Your resolution "${resolution}" is the kind of goal that makes life interesting. It's ambitious. It's bold. It might be slightly unrealistic, but that's what makes it fun. If you somehow pull it off, you'll have the best story at every party.</p>`;
+        }
+
+        return `
+                <div class="space-y-4">
+                    <h2 class="text-3xl font-bold">${title}</h2>
+                    <p class="text-lg opacity-90">${tagline}</p>
+                    ${specificFeedback}
+                    <div class="pt-4 border-t border-white/20">
+                        <p class="italic text-sm opacity-80">"${advice}"</p>
+                        <p class="text-sm mt-3 font-semibold">${encouragement}</p>
+                    </div>
+                </div>
+            `;
+      }
+
+      async function evaluateResolution() {
+        const input = document.getElementById('resolutionInput').value.trim();
+
+        if (!input) {
+          showError('Please enter a resolution first!');
+          return;
+        }
+
+        if (input.length < 5) {
+          showError('Please provide more details about your resolution (at least 5 characters).');
+          return;
+        }
+
+        document.getElementById('resultSection').classList.add('hidden');
+        document.getElementById('loadingState').classList.remove('hidden');
+
+        try {
+          const category = categorizeResolution(input);
+
+          try {
+            const feedback = await generateAIFeedback(category, input);
+            displayResult(feedback, category);
+          } catch (apiError) {
+            console.warn('AI API failed, using fallback:', apiError);
+            const feedback = generateFeedback(category, input);
+            displayResult(feedback, category);
+          }
+
+          document.getElementById('loadingState').classList.add('hidden');
+          document.getElementById('resultSection').classList.remove('hidden');
+        } catch (error) {
+          console.error('Error:', error);
+          showError('Something went wrong. Please try again!');
+          document.getElementById('loadingState').classList.add('hidden');
+        }
+      }
+
+      function displayResult(feedback, category) {
+        const resultCard = document.getElementById('resultCard');
+        resultCard.className = `verdict-card rounded-2xl p-8 ${category}`;
+        resultCard.innerHTML = feedback;
+      }
+
+      function showError(message) {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'bg-red-500/20 border border-red-500/50 rounded-lg p-4 mb-4 text-red-200';
+        errorDiv.textContent = message;
+
+        const container = document.querySelector('.max-w-2xl');
+        const inputSection = container.querySelector('.bg-white\\/10');
+        inputSection.parentNode.insertBefore(errorDiv, inputSection);
+
+        setTimeout(() => {
+          errorDiv.remove();
+        }, 5000);
+      }
+
+      async function generateAIFeedback(category, resolution) {
+        const categoryEmoji = {
+          achievable: '✅',
+          optimistic: '🎪',
+          delusional: '🚀',
+        };
+
+        const categoryTitle = {
+          achievable: 'ACTUALLY ACHIEVABLE',
+          optimistic: 'OPTIMISTIC BUT POSSIBLE',
+          delusional: 'DELUSIONAL (BUT WE ADMIRE THE CONFIDENCE)',
+        };
+
+        try {
+          const response = await fetch('/api/evaluate', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              category,
+              resolution,
+            }),
+            timeout: 35000
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error || `API error: ${response.status}`);
+          }
+
+          const data = await response.json();
+
+          return `
+                <div class="space-y-4">
+                    <h2 class="text-3xl font-bold">${data.categoryEmoji} ${data.categoryTitle}</h2>
+                    <p class="text-lg opacity-90">${data.tagline}</p>
+                    <p class="mt-4">${data.feedback}</p>
+                    <div class="pt-4 border-t border-white/20">
+                        <p class="italic text-sm opacity-80">"${data.quote}"</p>
+                        <p class="text-sm mt-3 font-semibold">${data.encouragement}</p>
+                    </div>
+                </div>
+            `;
+        } catch (error) {
+          console.error('AI feedback error:', error);
+          throw error;
+        }
+      }
+
+      function resetApp() {
+        document.getElementById('resolutionInput').value = '';
+        document.getElementById('resultSection').classList.add('hidden');
+        document.getElementById('resolutionInput').focus();
+      }
+
+      // Allow Enter key to submit
+      document
+        .getElementById('resolutionInput')
+        .addEventListener('keypress', function (e) {
+          if (e.key === 'Enter' && e.ctrlKey) {
+            evaluateResolution();
+          }
+        });
+
+      // Focus input on load
+      window.addEventListener('load', () => {
+        document.getElementById('resolutionInput').focus();
+      });
+    </script>
+  </body>
+</html>
